@@ -6,20 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('rsvps', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('guest_id')->constrained()->onDelete('cascade');
+            $table->enum('attendance', ['attending', 'not_attending'])->default('attending');
+            $table->integer('total_guests')->default(1);
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('rsvps');

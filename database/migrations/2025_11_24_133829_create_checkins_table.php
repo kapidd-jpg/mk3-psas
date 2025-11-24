@@ -6,20 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('checkins', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('guest_id')->constrained()->onDelete('cascade');
+            $table->timestamp('checked_in_at');
+            $table->string('checked_by')->nullable(); // Nama petugas yang scan
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('checkins');
