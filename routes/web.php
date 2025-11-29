@@ -8,7 +8,7 @@ use App\Http\Controllers\CheckinController;
 
 // Welcome page
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/invitation/ABC123');
 });
 
 // Guest invitation with QR code
