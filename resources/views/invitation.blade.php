@@ -734,9 +734,12 @@
                     {!! $qrCode !!}
                 </div>
                 <div class="qr-actions">
-                    <p>Your personal QR code for event check-in. Please present this code upon arrival.</p>
-                    <p><strong>Guest Code:</strong> {{ $guest->code }}</p>
-                </div>
+                <p>Your personal QR code for event check-in. Please present this code upon arrival.</p>
+                <p><strong>Guest Code:</strong> {{ $guest->code }}</p>
+                <a href="/qr/{{ $guest->code }}" class="btn" style="margin-top: 1rem;">
+                <i class="fas fa-expand"></i> View Full QR Code
+                 </a>
+             </div>
             </div>
         </div>
     </section>

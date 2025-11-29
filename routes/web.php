@@ -25,3 +25,5 @@ Route::post('/wishes', [WishController::class, 'store'])->name('wishes.store');
 // Check-in
 Route::get('/checkin/scanner', [CheckinController::class, 'scanPage'])->name('checkin.scanner');
 Route::get('/checkin/{code}', [CheckinController::class, 'scan'])->name('checkin.scan');
+
+Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
