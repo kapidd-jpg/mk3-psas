@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="dummy-csrf-token">
     <title>Fabian Rozan Fanani & Naifa Ashila Handoyo | Wedding Celebration</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --ivory: #f9f6f2;
@@ -163,6 +164,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .logo {
@@ -212,6 +214,31 @@
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 1001;
+            color: var(--charcoal);
+            transition: var(--transition);
+        }
+        
+        header.scrolled .mobile-menu {
+            color: var(--charcoal);
+        }
+        
+        .nav-links.open {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.98); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem 0;
+            text-align: center;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .nav-links.open li {
+            margin: 0.5rem 0;
         }
 
         /* Hero */
@@ -297,6 +324,14 @@
             font-size: 1.2rem;
             font-style: italic;
             box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .about-image img {
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 12px;
         }
 
         /* Details */
@@ -345,6 +380,7 @@
         .form-group {
             flex: 1;
             min-width: 250px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
@@ -379,12 +415,22 @@
             display: flex;
             gap: 1rem;
             margin-top: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .radio-option {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        .radio-option input[type="radio"] {
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            cursor: pointer;
+            margin-bottom: 0;
         }
 
         /* QR */
@@ -413,6 +459,11 @@
         }
 
         .qr-code img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .qr-code svg {
             width: 100%;
             height: 100%;
         }
@@ -491,6 +542,10 @@
             font-size: 1.5rem;
         }
 
+        .footer-column p {
+            color: #ccc;
+        }
+
         .footer-links {
             list-style: none;
         }
@@ -558,6 +613,118 @@
             border: 1px solid #f5c6cb;
         }
 
+        /* Music Control */
+        .audio-control-btn {
+            position: fixed;
+            bottom: 20px; 
+            right: 20px; 
+            z-index: 1050; 
+            background-color: var(--rose-gold); 
+            color: var(--white);
+            border: none;
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            cursor: pointer;
+            box-shadow: var(--shadow); 
+            font-size: 18px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-control-btn:hover {
+            background-color: var(--dark-rose);
+            transform: scale(1.1); 
+        }
+
+        /* Wedding Notification */
+        .wedding-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, var(--rose-gold) 0%, var(--dark-rose) 100%);
+            color: var(--white);
+            padding: 3rem;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transition: transform 0.5s ease;
+        }
+
+        .wedding-notification.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .wedding-notification h2 {
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .wedding-notification p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .wedding-notification .btn {
+            background-color: var(--white);
+            color: var(--rose-gold);
+        }
+
+        .wedding-notification .btn:hover {
+            background-color: var(--champagne);
+            color: var(--dark-rose);
+        }
+
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .notification-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Animations */
+        @keyframes floatUp {
+            0% { transform: translateY(10px) scale(0.9); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes gentleWiggle {
+            0%,100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-1.5px) rotate(-0.5deg); }
+            50% { transform: translateX(1.5px) rotate(0.5deg); }
+            75% { transform: translateX(-1px) rotate(-0.3deg); }
+        }
+
+        @keyframes glowPulse {
+            0%,100% { box-shadow: 0 4px 15px rgba(183,110,121,0.5), 0 0 8px rgba(255,255,255,0.4); }
+            50% { box-shadow: 0 6px 20px rgba(183,110,121,0.7), 0 0 12px rgba(255,255,255,0.6); }
+        }
+
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+            50% { box-shadow: 0 0 14px rgba(255,255,255,0.8); }
+            100% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
             h1 {
@@ -565,6 +732,9 @@
             }
             h2 {
                 font-size: 2.5rem;
+            }
+            .nav-links li {
+                margin-left: 1.5rem; 
             }
         }
 
@@ -586,6 +756,17 @@
             section {
                 padding: 4rem 0;
             }
+            .qr-container {
+                flex-direction: column;
+            }
+            .qr-actions {
+                text-align: center;
+                min-width: unset;
+            }
+            .qr-code {
+                flex: 0 0 200px;
+                height: 200px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -598,16 +779,21 @@
             .container {
                 padding: 0 1.5rem;
             }
+            .about-content {
+                gap: 2rem;
+            }
+            .card {
+                padding: 2rem 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
     <header id="header">
         <div class="container nav-container">
             <div class="logo">F&N</div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#hero">Home</a></li>
                 <li><a href="#about">Our Story</a></li>
                 <li><a href="#details">Details</a></li>
@@ -615,18 +801,17 @@
                 <li><a href="#qr">QR Code</a></li>
                 <li><a href="#wishes">Messages</a></li>
             </ul>
-            <div class="mobile-menu">
+            <div class="mobile-menu" id="mobileMenu">
                 <i class="fas fa-bars"></i>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="container">
             <div class="hero-content fade-in">
                 <h1>We're Getting <span>Married</span></h1>
-                <p class="guest-name">Dear {{ $guest->name }}</p>
+                <p class="guest-name">Dear Guest</p>
                 <p>Fabian Rozan Fanani & Naifa Ashila Handoyo invite you to celebrate their special day. Join us for an unforgettable celebration of love, laughter, and new beginnings.</p>
                 <div class="hero-btns">
                     <a href="#about" class="btn">Open Invitation</a>
@@ -636,7 +821,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section class="about" id="about">
         <div class="container">
             <h2 class="text-center fade-in">Our Love Story</h2>
@@ -647,13 +831,12 @@
                     <p>As we stand on the brink of forever, we want you to be a part of our next chapter. Join us as we exchange vows and promise each other a lifetime of adventures.</p>
                 </div>
                 <div class="about-image fade-in">
-                    <img src="{{ asset('images/couple-photo.jpg') }}" alt="Fabian & Naifa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                    <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800" alt="Fabian & Naifa">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Details Section -->
     <section class="details" id="details">
         <div class="container">
             <h2 class="text-center fade-in">Wedding Details</h2>
@@ -665,6 +848,9 @@
                     <h3>Location</h3>
                     <p>SMK Telkom Purwokerto</p>
                     <p>Jl. DI Panjaitan No.128, Karangreja, Purwokerto Kidul, South Purwokerto District, Banyumas Regency, Central Java 53141</p>
+                    <a href="https://maps.app.goo.gl/bDu22rrdEUnayUDw5" target="_blank" class="btn" style="margin-top: 1rem;">
+                        <i class="fas fa-map-marked-alt"></i> Open in Google Maps
+                    </a>
                 </div>
                 <div class="card detail-card fade-in">
                     <div class="detail-icon">
@@ -673,6 +859,27 @@
                     <h3>Date & Time</h3>
                     <p>Monday, December 8th, 2025</p>
                     <p>Ceremony begins at 7:30 - 9:00 AM</p>
+                    <div id="countdown" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--light-gray);">
+                        <p style="font-weight: 600; color: var(--rose-gold); margin-bottom: 1rem;">Counting Down To Our Big Day</p>
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div id="days" style="font-size: 2rem; font-weight: 700; color: var(--rose-gold);">0</div>
+                                <div style="font-size: 0.9rem; color: #777;">Days</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div id="hours" style="font-size: 2rem; font-weight: 700; color: var(--rose-gold);">0</div>
+                                <div style="font-size: 0.9rem; color: #777;">Hours</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div id="minutes" style="font-size: 2rem; font-weight: 700; color: var(--rose-gold);">0</div>
+                                <div style="font-size: 0.9rem; color: #777;">Minutes</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div id="seconds" style="font-size: 2rem; font-weight: 700; color: var(--rose-gold);">0</div>
+                                <div style="font-size: 0.9rem; color: #777;">Seconds</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card detail-card fade-in">
                     <div class="detail-icon">
@@ -686,110 +893,79 @@
         </div>
     </section>
 
-    <!-- RSVP Section -->
     <section class="rsvp" id="rsvp">
-    <div class="container" style="position: relative;">
-        <h2 class="text-center fade-in">We Hope You Can Join Us</h2>
-        <div class="rsvp-form card fade-in">
-            <div id="rsvpAlert" class="alert"></div>
-            <form id="weddingRsvp">
-                <input type="hidden" id="guestId" value="{{ $guest->id }}">
-                
-                <div class="form-group">
-                    <label>Will you be attending? *</label>
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <input type="radio" id="attendingYes" name="attendance" value="attending" required>
-                            <label for="attendingYes">Yes, I'll be there!</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="attendingNo" name="attendance" value="not_attending">
-                            <label for="attendingNo">Sorry, I can't make it</label>
+        <div class="container">
+            <h2 class="text-center fade-in">We Hope You Can Join Us</h2>
+            <div class="rsvp-form card fade-in">
+                <div id="rsvpAlert" class="alert"></div>
+                <form id="weddingRsvp">
+                    <input type="hidden" id="guestId" value="1">
+                    
+                    <div class="form-group">
+                        <label for="guestEmail">Your Email *</label>
+                        <input type="email" id="guestEmail" class="form-control" required placeholder="your@email.com">
+                        <small style="color: #777; font-size: 0.9rem;">We'll send you confirmation and wedding day reminder</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Will you be attending? *</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="attendingYes" name="attendance" value="attending" required>
+                                <label for="attendingYes">Yes, I'll be there!</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="attendingNo" name="attendance" value="not_attending">
+                                <label for="attendingNo">Sorry, I can't make it</label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="totalGuests">Number of Guests (max: {{ $guest->quota }}) *</label>
-                    <input type="number" id="totalGuests" class="form-control" min="1" max="{{ $guest->quota }}" value="1" required>
-                </div>
+                    <div class="form-group">
+                        <label for="totalGuests">Number of Guests (max: 5) *</label>
+                        <input type="number" id="totalGuests" class="form-control" min="1" max="5" value="1" required>
+                    </div>
 
-                
-
-                <button type="submit" class="btn" style="width: 100%;">Submit RSVP</button>
-            </form>
-        </div>
-    </div>
-</section>
-
-<style>
-
-.bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    right: 12px;
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    box-shadow: 0 0 12px rgba(255,255,255,0.6);
-    animation: shimmer 2.5s infinite;
-}
-
-/* Floating animation */
-@keyframes floatUp {
-    0% { transform: translateY(10px) scale(0.9); opacity: 0; }
-    100% { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-/* Gentle wiggle */
-@keyframes gentleWiggle {
-    0%,100% { transform: translateX(0) rotate(0deg); }
-    25% { transform: translateX(-1.5px) rotate(-0.5deg); }
-    50% { transform: translateX(1.5px) rotate(0.5deg); }
-    75% { transform: translateX(-1px) rotate(-0.3deg); }
-}
-
-/* Glow pulse */
-@keyframes glowPulse {
-    0%,100% { box-shadow: 0 4px 15px rgba(183,110,121,0.5), 0 0 8px rgba(255,255,255,0.4); }
-    50% { box-shadow: 0 6px 20px rgba(183,110,121,0.7), 0 0 12px rgba(255,255,255,0.6); }
-}
-
-/* Shimmer dot */
-@keyframes shimmer {
-    0% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
-    50% { box-shadow: 0 0 14px rgba(255,255,255,0.8); }
-    100% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
-}
-</style>
-
+                    <button type="submit" class="btn" style="width: 100%;">Submit RSVP</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- QR Section -->
     <section class="qr-section" id="qr">
         <div class="container">
             <h2 class="text-center fade-in">Your Digital Invitation</h2>
             <div class="qr-container fade-in">
                 <div class="qr-code">
-                    {!! $qrCode !!}
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="100" height="100" fill="white"/>
+                        <rect x="10" y="10" width="10" height="10" fill="black"/>
+                        <rect x="30" y="10" width="10" height="10" fill="black"/>
+                        <rect x="50" y="10" width="10" height="10" fill="black"/>
+                        <rect x="70" y="10" width="10" height="10" fill="black"/>
+                        <rect x="10" y="30" width="10" height="10" fill="black"/>
+                        <rect x="70" y="30" width="10" height="10" fill="black"/>
+                        <rect x="10" y="50" width="10" height="10" fill="black"/>
+                        <rect x="30" y="50" width="10" height="10" fill="black"/>
+                        <rect x="50" y="50" width="10" height="10" fill="black"/>
+                        <rect x="70" y="50" width="10" height="10" fill="black"/>
+                        <rect x="10" y="70" width="10" height="10" fill="black"/>
+                        <rect x="30" y="70" width="10" height="10" fill="black"/>
+                        <rect x="50" y="70" width="10" height="10" fill="black"/>
+                        <rect x="70" y="70" width="10" height="10" fill="black"/>
+                    </svg>
                 </div>
                 <div class="qr-actions">
-                <p>Your personal QR code for event check-in. Please present this code upon arrival.</p>
-                <p><strong>Guest Code:</strong> {{ $guest->code }}</p>
-                <a href="/qr/{{ $guest->code }}" class="btn" style="margin-top: 1rem;">
-                <i class="fas fa-expand"></i> View Full QR Code
-                 </a>
-             </div>
+                    <p>Your personal QR code for event check-in. Please present this code upon arrival.</p>
+                    <p><strong>Guest Code:</strong> DEMO123</p>
+                    <button class="btn" style="margin-top: 1rem;">
+                        <i class="fas fa-expand"></i> View Full QR Code
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Wishes Section -->
     <section class="wishes" id="wishes">
         <div class="container">
             <h2 class="text-center fade-in">Messages & Wishes</h2>
@@ -798,7 +974,7 @@
                 <form id="wishForm">
                     <div class="form-group">
                         <label for="wishName">Your Name *</label>
-                        <input type="text" id="wishName" class="form-control" value="{{ $guest->name }}" required>
+                        <input type="text" id="wishName" class="form-control" value="" required>
                     </div>
                     <div class="form-group">
                         <label for="wishMessage">Your Message *</label>
@@ -808,17 +984,18 @@
                 </form>
             </div>
             <div class="wishes-list" id="wishesList">
-                @foreach($wishes as $wish)
                 <div class="wish-item fade-in visible">
-                    <div class="wish-author">{{ $wish->name }}</div>
-                    <div class="wish-message">{{ $wish->message }}</div>
+                    <div class="wish-author">John Doe</div>
+                    <div class="wish-message">Congratulations on your wedding! Wishing you a lifetime of love and happiness.</div>
                 </div>
-                @endforeach
+                <div class="wish-item fade-in visible">
+                    <div class="wish-author">Jane Smith</div>
+                    <div class="wish-message">May your marriage be filled with all the right ingredients: love, humor, understanding, and patience.</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -842,6 +1019,19 @@
         </div>
     </footer>
 
+    <audio id="background-music" src="{{ asset('audio/lagunikahan.mpeg') }}" loop preload="auto"></audio>
+    <button id="play-pause-button" class="audio-control-btn" title="Kontrol Musik Latar">
+        <i class="fas fa-play"></i> 
+    </button>
+
+    <!-- Wedding Notification -->
+    <div class="notification-overlay" id="notificationOverlay"></div>
+    <div class="wedding-notification" id="weddingNotification">
+        <h2>🎉 The Wedding Has Begun! 💒</h2>
+        <p>Fabian & Naifa's special moment is starting now!</p>
+        <button class="btn" onclick="closeNotification()">Celebrate With Us!</button>
+    </div>
+
     <script>
     // Get CSRF token
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -856,8 +1046,8 @@
         }
     });
 
-    // Fade in animation on scroll
     document.addEventListener('DOMContentLoaded', function() {
+        // Fade in animation on scroll
         const fadeElements = document.querySelectorAll('.fade-in');
 
         const fadeInOnScroll = function() {
@@ -876,25 +1066,138 @@
         // Check on scroll
         window.addEventListener('scroll', fadeInOnScroll);
 
-        // Mobile menu toggle (optional, if you want to add mobile menu functionality)
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const navLinks = document.querySelector('.nav-links');
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navLinks = document.getElementById('navLinks');
 
-        if (mobileMenu && navLinks) {
-            mobileMenu.addEventListener('click', function() {
-                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        mobileMenu.addEventListener('click', function() {
+            navLinks.classList.toggle('open');
+            const icon = mobileMenu.querySelector('i');
+            if (navLinks.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                    document.getElementById('mobileMenu').querySelector('i').classList.remove('fa-times');
+                    document.getElementById('mobileMenu').querySelector('i').classList.add('fa-bars');
+                }
             });
+        });
+
+        // Music Control
+        const audio = document.getElementById('background-music');
+        const playPauseButton = document.getElementById('play-pause-button');
+        
+        audio.volume = 0.4;
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+                    })
+                    .catch(error => {
+                        console.log('Pemutaran diblokir oleh browser:', error);
+                    });
+            } else {
+                audio.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            }
         }
+
+        playPauseButton.addEventListener('click', togglePlayPause);
+        
+        document.body.addEventListener('click', function attemptPlayOnce() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+                    })
+                    .catch(e => console.log("Gagal memicu play awal:", e));
+            }
+            document.body.removeEventListener('click', attemptPlayOnce);
+        });
+
+        // Countdown Timer
+        let notificationShown = false;
+
+        function updateCountdown() {
+            const weddingDate = new Date('2025-12-08T07:30:00').getTime();
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+            } else {
+                document.getElementById('countdown').innerHTML = '<p style="font-weight: 600; color: var(--rose-gold);">The Wedding Day is Here! 🎉</p>';
+                
+                // Show notification only once
+                if (!notificationShown) {
+                    showWeddingNotification();
+                    notificationShown = true;
+                }
+            }
+        }
+
+        function showWeddingNotification() {
+            // Check if user has RSVP'd
+            const hasRSVP = localStorage.getItem('hasRSVP') === 'true';
+            
+            if (!hasRSVP) {
+                console.log('User has not RSVP\'d, notification not shown');
+                return;
+            }
+            
+            const overlay = document.getElementById('notificationOverlay');
+            const notification = document.getElementById('weddingNotification');
+            
+            overlay.classList.add('show');
+            notification.classList.add('show');
+            
+            // Browser notification (if permission granted)
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('🎉 Wedding Started!', {
+                    body: 'Fabian & Naifa\'s wedding ceremony has begun!',
+                    icon: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=200',
+                    tag: 'wedding-notification'
+                });
+            }
+            
+            // Play confetti sound or celebration effect (optional)
+            if (!audio.paused) {
+                audio.volume = 0.6; // Increase volume for celebration
+            }
+        }
+
+        // Update countdown setiap detik
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
         // RSVP Form Submission
         document.getElementById('weddingRsvp').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const guestId = document.getElementById('guestId').value;
+            const email = document.getElementById('guestEmail').value;
             const attendance = document.querySelector('input[name="attendance"]:checked');
             const totalGuests = document.getElementById('totalGuests').value;
             
-            // Validasi attendance
             if (!attendance) {
                 alert('Please select attendance option');
                 return;
@@ -909,6 +1212,7 @@
                     },
                     body: JSON.stringify({
                         guest_id: guestId,
+                        email: email,
                         attendance: attendance.value,
                         total_guests: totalGuests
                     })
@@ -918,11 +1222,24 @@
                 
                 const alertBox = document.getElementById('rsvpAlert');
                 if (data.success) {
+                    // Simpan status RSVP ke localStorage
+                    if (attendance.value === 'attending') {
+                        localStorage.setItem('hasRSVP', 'true');
+                        
+                        // Request notification permission
+                        if ('Notification' in window && Notification.permission === 'default') {
+                            Notification.requestPermission().then(permission => {
+                                if (permission === 'granted') {
+                                    console.log('Notification permission granted');
+                                }
+                            });
+                        }
+                    }
+                    
                     alertBox.className = 'alert alert-success';
-                    alertBox.textContent = data.message;
+                    alertBox.textContent = 'RSVP submitted successfully! Check your email for confirmation and wedding day reminder!';
                     alertBox.style.display = 'block';
                     
-                    // Optional: Scroll to alert
                     alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 } else {
                     alertBox.className = 'alert alert-error';
@@ -930,14 +1247,21 @@
                     alertBox.style.display = 'block';
                 }
 
-                // Auto hide alert after 5 seconds
                 setTimeout(() => {
                     alertBox.style.display = 'none';
                 }, 5000);
 
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                
+                const alertBox = document.getElementById('rsvpAlert');
+                alertBox.className = 'alert alert-error';
+                alertBox.textContent = 'An error occurred. Please try again.';
+                alertBox.style.display = 'block';
+                
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 5000);
             }
         });
 
@@ -948,63 +1272,36 @@
             const name = document.getElementById('wishName').value;
             const message = document.getElementById('wishMessage').value;
 
-            try {
-                const response = await fetch('/wishes', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        message: message
-                    })
-                });
+            const wishesList = document.getElementById('wishesList');
+            const newWish = document.createElement('div');
+            newWish.className = 'wish-item fade-in visible';
+            newWish.innerHTML = `
+                <div class="wish-author">${name}</div>
+                <div class="wish-message">${message}</div>
+            `;
+            wishesList.prepend(newWish);
 
-                const data = await response.json();
+            document.getElementById('wishForm').reset();
 
-                if (data.success) {
-                    // Add new wish to the list
-                    const wishesList = document.getElementById('wishesList');
-                    const newWish = document.createElement('div');
-                    newWish.className = 'wish-item fade-in visible';
-                    newWish.innerHTML = `
-                        <div class="wish-author">${name}</div>
-                        <div class="wish-message">${message}</div>
-                    `;
-                    wishesList.prepend(newWish);
+            const alertBox = document.getElementById('wishAlert');
+            alertBox.className = 'alert alert-success';
+            alertBox.textContent = 'Your message has been sent successfully!';
+            alertBox.style.display = 'block';
 
-                    // Reset form
-                    document.getElementById('wishForm').reset();
-                    document.getElementById('wishName').value = '{{ $guest->name }}';
-
-                    // Show success alert
-                    const alertBox = document.getElementById('wishAlert');
-                    alertBox.className = 'alert alert-success';
-                    alertBox.textContent = data.message;
-                    alertBox.style.display = 'block';
-
-                    // Auto hide alert after 5 seconds
-                    setTimeout(() => {
-                        alertBox.style.display = 'none';
-                    }, 5000);
-                } else {
-                    // Show error alert
-                    const alertBox = document.getElementById('wishAlert');
-                    alertBox.className = 'alert alert-error';
-                    alertBox.textContent = 'Failed to submit wish. Please try again.';
-                    alertBox.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        alertBox.style.display = 'none';
-                    }, 5000);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
         });
     });
-</script>
+
+    // Close notification function
+    function closeNotification() {
+        const overlay = document.getElementById('notificationOverlay');
+        const notification = document.getElementById('weddingNotification');
+        
+        overlay.classList.remove('show');
+        notification.classList.remove('show');
+    }
+    </script>
 </body>
 </html>
