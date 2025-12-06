@@ -958,7 +958,7 @@
                 <form id="wishForm">
                     <div class="form-group">
                         <label for="wishName">Your Name *</label>
-                        <input type="text" id="wishName" class="form-control" value="" required>
+                        <input type="text" id="wishName" class="form-control" value="{{ $guest->name }}" required>
                     </div>
                     <div class="form-group">
                         <label for="wishMessage">Your Message *</label>
