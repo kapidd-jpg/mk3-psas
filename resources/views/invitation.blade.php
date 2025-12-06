@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="dummy-csrf-token">
-    <title>Fabian Rozan Fanani & Naifa Ashila Handoyo | Wedding Celebration</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Fabian & Naifa | Wedding Celebration</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -1250,12 +1250,30 @@
         });
 
         // Wish Form Submission
-        document.getElementById('wishForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+document.getElementById('wishForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-            const name = document.getElementById('wishName').value;
-            const message = document.getElementById('wishMessage').value;
+    const name = document.getElementById('wishName').value;
+    const message = document.getElementById('wishMessage').value;
 
+    try {
+        // KIRIM ke backend
+        const response = await fetch('/wishes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                name: name,
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Tampilkan di UI
             const wishesList = document.getElementById('wishesList');
             const newWish = document.createElement('div');
             newWish.className = 'wish-item fade-in visible';
@@ -1265,18 +1283,36 @@
             `;
             wishesList.prepend(newWish);
 
+            // Reset form
             document.getElementById('wishForm').reset();
 
+            // Show success alert
             const alertBox = document.getElementById('wishAlert');
             alertBox.className = 'alert alert-success';
-            alertBox.textContent = 'Your message has been sent successfully!';
+            alertBox.textContent = data.message;
             alertBox.style.display = 'block';
 
             setTimeout(() => {
                 alertBox.style.display = 'none';
             }, 5000);
-        });
-    });
+        } else {
+            // Show error alert
+            const alertBox = document.getElementById('wishAlert');
+            alertBox.className = 'alert alert-error';
+            alertBox.textContent = 'Failed to submit wish. Please try again.';
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    }
+});  // Tutup addEventListener Wish Form
+
+        });  // Tutup DOMContentLoaded ← INI YANG KURANG!
 
     // Close notification function
     function closeNotification() {
