@@ -29,3 +29,6 @@ Route::get('/checkin/{code}', [CheckinController::class, 'scan'])->name('checkin
 
 // Admin Dashboard
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+// Route resource akan membuat 7 route sekaligus (index, create, store, show, edit, update, destroy)
+Route::resource('guests', GuestController::class);

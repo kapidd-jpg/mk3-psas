@@ -6,9 +6,52 @@ use App\Models\Guest;
 use App\Models\Wish;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
 
 class GuestController extends Controller
 {
+    public function index()
+    {
+        // Ambil semua data tamu, diurutkan berdasarkan tanggal dibuat terbaru
+        $guests = Guest::orderBy('created_at', 'desc')->get();
+        return view('guests.index', compact('guests'));
+    }
+
+    public function create()
+    {
+        return view('guests.create');
+    }
+
+    public function store(Request $request)
+    {
+        // 1. Validasi Input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255|unique:guests,email',
+            'phone' => 'nullable|string|max:255',
+            'quota' => 'required|integer|min:1',
+        ]);
+
+        // 2. Buat Kode Akses Otomatis dan Pastikan Keunikannya
+        $validatedData['code'] = $this->generateUniqueCode();
+
+        // 2. Membuat Data Baru
+        Guest::create($validatedData);
+
+        // 3. Redirect dengan pesan sukses
+        return redirect()->route('guests.index')->with('success', 'Tamu berhasil ditambahkan!');
+    }
+    
+    private function generateUniqueCode(): string
+    {
+        do {
+            // Menghasilkan string acak sepanjang 8 karakter (Anda bisa ubah panjangnya)
+            $code = Str::random(8); 
+        } while (Guest::where('code', $code)->exists()); // Pastikan kode belum ada
+
+        return $code;
+    }
+
     public function show($code)
     {
         // Cari guest berdasarkan code
