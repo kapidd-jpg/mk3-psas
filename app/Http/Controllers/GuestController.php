@@ -22,7 +22,7 @@ class GuestController extends Controller
         return view('guests.create');
     }
 
-    public function store(Request $request)
+public function store(Request $request)
     {
         // 1. Validasi Input
         $validatedData = $request->validate([
@@ -35,13 +35,17 @@ class GuestController extends Controller
         // 2. Buat Kode Akses Otomatis dan Pastikan Keunikannya
         $validatedData['code'] = $this->generateUniqueCode();
 
-        // 2. Membuat Data Baru
-        Guest::create($validatedData);
+        // 3. Membuat Data Baru DAN mengambil instance model yang baru dibuat
+        $guest = Guest::create($validatedData); // <-- Perubahan di sini: Simpan hasil create ke variabel $guest
 
-        // 3. Redirect dengan pesan sukses
-        return redirect()->route('guests.index')->with('success', 'Tamu berhasil ditambahkan!');
+        // 4. Redirect ke halaman 'guest.show' dengan membawa kode tamu
+        // Menggunakan $guest->code untuk mendapatkan kode yang baru di-generate
+        return redirect()->route('guest.show', ['code' => $guest->code])
+                         ->with('success', 'Tamu berhasil ditambahkan! Undangan siap dikirim.'); // <-- Perubahan di sini
+
+        // Perubahan Sebelumnya:
+        // return redirect()->route('guests.index')->with('success', 'Tamu berhasil ditambahkan!');
     }
-    
     private function generateUniqueCode(): string
     {
         do {
